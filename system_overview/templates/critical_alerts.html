@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}General System Overview{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+    <!-- Your specific content for the General System Overview page goes here -->
+    <div class="top-menu nav nav-tabs">
+                    <a href="/system_overview/general_system_overview">General System Overview</a>
+                    <a href="/system_overview/security_status">Security Status</a>
+                    <a href="/system_overview/security_assessment">Security Assessment</a>
+                    <a class="active" href="/system_overview/critical_alerts">Critical Alerts</a>
+                </div>
+                
+                <div class="control-panel container-fluid">
+
+                    <div class="row controls">
+                        <div class="col-6">
+                            <div class="box">
+                                <h5>System Name and Description:</h5>
+                                <ul>
+                                    <li><h6>Host: <br> ubuntu-VirtualBox Kernel:</h6> 6.2.0-36-generic x86_64 bits: 64</li>
+                                    <li><h6>Desktop:</h6>GNOME 42.9</li>
+                                    <li><h6>Distro:</h6>Ubuntu 22.04.3 LTS (Jammy Jellyfish)</li>
+                                </ul>
+                            </div>
+                            <div class="box">
+                                <h5>Operating System Details:</h5>
+                                <h6>Network:</h6>
+                                <ul>
+                                    <li>Device-1: Intel 82540EM Gigabit Ethernet driver: e1000</li>
+                                    <li>IF: enp0s3 state: up speed: 1000 Mbps duplex: full mac: 08:00:27:dd:3a:eb</li>
+                                    <li>Device-2: Intel 82371AB/EB/MB PIIX4 ACPI type: network bridge driver: piix4_smbus</li>
+                                </ul>
+                                <h6>Drives:</h6>
+                                <ul>
+                                    <li>Local Storage: total: 25 GiB used: 9.6 GiB (38.4%)</li>
+                                    <li>ID-1: /dev/sda vendor: VirtualBox model: VBOX HARDDISK size: 25 GiB</li>
+                                </ul>
+                                <h6>Partition:</h6>
+                                <ul>
+                                    <li>ID-1: / size: 23.94 GiB used: 9.6 GiB (40.1%) fs: ext4 dev: /dev/sda3</li>
+                                    <li>ID-2: /boot/efi size: 512 MiB used: 6.1 MiB (1.2%) fs: vfat dev: /dev/sda2</li>
+                                </ul>    
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="box">
+                                <h5>Hardware Specifications:</h5>
+                                <h6>Machine:</h6>
+                                <ul>
+                                    <li><span class="sub-heading">Type:</span> Virtualbox</li>
+                                    <li><span class="sub-heading">System:</span> innotek GmbH product: VirtualBox v: 1.2</li>
+                                    <li><span class="sub-heading">model:</span> VirtualBox</li>
+                                    <li><span class="sub-heading">v:</span> 1.2</li>
+                                    <li><span class="sub-heading">BIOS:</span> innotek GmbH</li>
+                                </ul>
+                                <h6>Memory:</h6>
+                                <ul>
+                                    <li><span class="sub-heading">RAM:</span> total: 3.82 GiB <br> used: 1.09 GiB (28.5%)</li>
+                                    <li><span class="sub-heading">Swap:</span> ID-1: swap-1 type: file size: 1.14 GiB used: 0 KiB (0.0%) file: /swapfile</li>
+                                </ul>
+                                <h6>CPU:</h6>
+                                <ul>
+                                    <li><span class="sub-heading">Info:</span> dual core model: Intel Core i5-1035G1 bits: 64 type: MCP cache: L2: 1024 KiB</li>
+                                    <li><span class="sub-heading">Speed (MHz):</span> avg: 1190 min/max: N/A cores: 1: 1190 2: 1190</li>
+                                </ul>
+                                <h6>Graphics:</h6>
+                                <ul>
+                                    <li><span class="sub-heading">Device-1:</span> VMware SVGA II Adapter</li>
+                                    <li><span class="sub-heading">Display:</span> server: X.Org v: 1.22.1.1 driver: gpu: vmwgfx resolution: 1920x1005~60Hz</li>
+                                    <li><span class="sub-heading">OpenGL:</span> renderer: llvmpipe (LLVM 15.0.7 128 bits) v: 4.5 Mesa 23.0.4-0ubuntu1~22.04.1</li>
+                                </ul>
+                                <h6>Audio:</h6>
+                                <ul>
+                                    <li><span class="sub-heading">Device-1:</span> Intel 82801AA AC97 Audio driver: snd_intel8x0</li>
+                                </ul>            
+                            </div>                         
+                        </div>
+                    </div>
+
+                </div>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}VPN Settings{% endblock %}
+
+{% block extra_head %}
+
+<style>
+
+    input {
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        background-color: #e75a37;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #e44923;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a href="/network_management/firewall_management/">Firewall Settings</a>
+    <a class="active" href="/network_management/vpn">VPN Settings</a>
+    <a href="/network_management/tor">TOR Settings</a>
+</div>
+
+<div class="control-panel container-fluid">
+
+    <div class="row controls">
+        <h2>VPN Settings</h2>
+        <form action="#" method="post">
+            <label for="openvpn">Use OpenVPN:</label>
+            <input type="checkbox" id="openvpn" name="openvpn"><br>
+
+            <label for="wireguard">Use WireGuard:</label>
+            <input type="checkbox" id="wireguard" name="wireguard"><br>
+
+            <label for="vpnServer">VPN Server Address:</label>
+            <input type="text" id="vpnServer" name="vpnServer" placeholder="Enter VPN Server Address"><br>
+
+            <label for="vpnUsername">VPN Username:</label>
+            <input type="text" id="vpnUsername" name="vpnUsername" placeholder="Enter VPN Username"><br>
+
+            <label for="vpnPassword">VPN Password:</label>
+            <input type="password" id="vpnPassword" name="vpnPassword" placeholder="Enter VPN Password"><br>
+
+            <button type="submit">Apply VPN Settings</button><br>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

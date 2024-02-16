@@ -1,0 +1,329 @@
+{% extends 'base.html' %}
+
+{% block title %}General System Overview{% endblock %}
+
+{% block extra_head %}
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firewall Configuration</title>
+    <style>
+        section {
+            padding: 20px;
+        }
+
+        .dashboard-card {
+            background-color: #363636a4;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #333;
+            color: #fff;
+        }
+
+        button {
+            background-color: #e75a37;
+            margin-left: 10px;
+            padding: 5px 10px;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        a.s-btn {
+            background-color: #e75a37;
+            margin-left: 10px;
+            padding: 5px 10px;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        button.edit-btn {
+            background-color: #333;
+            margin-left: 10px;
+            padding: 5px 10px;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* background-color: rgba(0,0,0,0.5); */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .rule-btn {
+            margin-bottom: 12px;
+        }
+    </style>
+
+    {% endblock %}
+
+    {% block content %}
+    <!-- Your specific content for the General System Overview page goes here -->
+    <div class="top-menu nav nav-tabs">
+        <a class="active" href="/network_management/firewall_management/">Firewall Settings</a>
+        <!-- <a href="/network_management/vpn">VPN Settings</a>
+        <a href="/network_management/tor">TOR Settings</a> -->
+    </div>
+
+    <div class="control-panel container-fluid">
+
+        <div class="row controls">
+            <section>
+                <div class="box dashboard-card">
+                    <h2>Firewall Status</h2>
+                    <p>{{ data.status }}</p>
+                    <p>Total Rules: {{ data.num_rules }}</p>
+                    {% if data.status == "Firewall is inactive" %}
+                    <a class="s-btn" href="/network_management/firewall_management/?set_status=enable">Enable Firewall</a>
+                    {% else %}
+                    <a class="s-btn" href="/network_management/firewall_management/?set_status=disable">Disable Firewall</a>
+                    {% endif %}
+                </div>
+
+                <div class="box dashboard-card">
+                    <h2 style="margin-bottom: 20px;">Quick Actions</h2>
+                    <button onclick="openAddRuleModal()">Add New Rule</button>
+                    <button onclick="openRemoveRuleModal()">Remove Rule</button>
+                </div>
+
+                <!-- "Remove Rule" Modal -->
+                <div id="removeRuleModal" class="modal">
+                    <div class="modal-content">
+                        <h2>Remove Firewall Rules</h2>
+                        <form id="removeRuleForm">
+                            {% csrf_token %}
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Port</th>
+                                        <th>Protocol</th>
+                                        <th>Source IP</th>
+                                        <th>Action</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rule in rules %}
+                                    <tr>
+                                        <td>{{ rule.id }}</td>
+                                        <td>{{ rule.port }}</td>
+                                        <td>{{ rule.protocol }}</td>
+                                        <td>{{ rule.source_ip }}</td>
+                                        <td>{{ rule.action }}</td>
+                                        <td><input type="checkbox" name="removeRule" value="{{ rule.id }}"></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <button class="rule-btn" type="button" onclick="handleFirewallRules('remove')">Remove Selected</button>
+                        </form>
+
+                        <!-- Close button for the "Remove Rule" modal -->
+                        <button onclick="closeRemoveRuleModal()">Close</button>
+                    </div>
+                </div>
+
+                <div id="addRuleModal" class="modal">
+                    <div class="modal-content">
+                        <!-- Form for adding a rule -->
+                        <form id="firewallRuleForm">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <!-- <input type="hidden" name="method" id="id_method" value="add"> -->
+                            <button class="rule-btn" onclick="handleFirewallRules('add')" type="button">Add Rule</button>
+                        </form>
+
+                        <!-- Close button for the modal -->
+                        <button onclick="closeAddRuleModal()">Close</button>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <h2>Rules</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Port</th>
+                                <th>Protocol</th>
+                                <th>Source IP</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rule in rules %}
+                            <tr>
+                                <td>{{ rule.id }}</td>
+                                <td>{{ rule.port }}</td>
+                                <td>{{ rule.protocol }}</td>
+                                <td>{{ rule.source_ip }}</td>
+                                <td>{{ rule.action }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+    </div>
+
+    <script>
+        // Function to open the "Add Rule" modal
+        function openAddRuleModal() {
+            document.getElementById('addRuleModal').style.display = 'flex';
+        }
+
+        // Function to close the "Add Rule" modal
+        function closeAddRuleModal() {
+            document.getElementById('addRuleModal').style.display = 'none';
+        }
+
+        // Function to open the "Remove Rule" modal
+        function openRemoveRuleModal() {
+            document.getElementById('removeRuleModal').style.display = 'flex';
+        }
+
+        // Function to close the "Remove Rule" modal
+        function closeRemoveRuleModal() {
+            document.getElementById('removeRuleModal').style.display = 'none';
+        }
+
+        // Function to handle both adding and removing rules
+        function handleFirewallRules(action) {
+            const formId = action === 'add' ? 'firewallRuleForm' : 'removeRuleForm';
+            const form = document.getElementById(formId);
+            const formData = new FormData(form);
+
+            formData.append('method', action);
+
+            // Send POST request using fetch API
+            if (action === 'add') {
+                addFirewallRule(formData);
+                closeAddRuleModal();
+            } else {
+                removeSelectedRules(formData);
+                closeRemoveRuleModal();
+            }
+
+        }
+
+        // Function to handle removal of selected rules
+        function removeSelectedRules(formData) {
+            // const form = document.getElementById('removeRuleForm');
+            // const formData = new FormData(form);
+
+            // Send POST request using fetch API
+            fetch('/network_management/firewall_management/', {  // Update with the correct URL
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // alert('Selected firewall rules removed successfully!');
+                        closeRemoveRuleModal();  // Close the modal after success
+                        location.reload();
+                        // Optionally, you may reload the page or update the displayed rules dynamically
+                    } else {
+                        alert('Failed to remove selected firewall rules. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+
+        // Function to handle adding a new rule
+        function addFirewallRule(formData) {
+            // Collect form data
+            // const formData = new FormData(document.getElementById('firewallRuleForm'));
+
+            // Send POST request using fetch API
+            fetch('/network_management/firewall_management/', {  // Specify the URL directly
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // alert('Firewall rule added successfully!');
+                        closeAddRuleModal();  // Close the modal after success
+                        location.reload();
+                        // Optionally, you may reload the page or update the displayed rules dynamically
+                    } else {
+                        alert('Failed to add firewall rule. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+        }
+
+        // Event listener for the "Add Rule" form submission
+        // document.getElementById('firewallRuleForm').addEventListener('submit', function (event) {
+        //     event.preventDefault();
+        //     addFirewallRule();
+        // });
+    </script>
+
+    {% endblock %}

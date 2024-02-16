@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}TOR Settings{% endblock %}
+
+{% block extra_head %}
+
+<style>
+    input {
+        padding: 8px;
+        margin-bottom: 16px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    button {
+        background-color: #e75a37;
+        color: #fff;
+        padding: 10px;
+        border: none;
+        border-radius: 3px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #e44923;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a href="/network_management/firewall_management/">Firewall Settings</a>
+    <a href="/network_management/vpn">VPN Settings</a>
+    <a class="active" href="/network_management/tor">TOR Settings</a>
+</div>
+
+<div class="control-panel container-fluid">
+
+    <div class="row controls">
+        <h2>TOR Settings</h2>
+        <form action="#" method="post">
+            <label for="enableTor">Enable TOR:</label>
+            <input type="checkbox" id="enableTor" name="enableTor"><br>
+
+            <label for="torSocksPort">TOR SOCKS Port:</label>
+            <input type="text" id="torSocksPort" name="torSocksPort" placeholder="Enter TOR SOCKS Port"><br>
+
+            <label for="torControlPort">TOR Control Port:</label>
+            <input type="text" id="torControlPort" name="torControlPort" placeholder="Enter TOR Control Port"><br>
+
+            <label for="torDataDirectory">TOR Data Directory:</label>
+            <input type="text" id="torDataDirectory" name="torDataDirectory" placeholder="Enter TOR Data Directory"><br>
+
+            <button type="submit">Apply TOR Settings</button>
+        </form>
+    </div>
+
+</div>
+{% endblock %}

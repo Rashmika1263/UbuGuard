@@ -1,0 +1,292 @@
+{% extends 'base.html' %}
+
+{% block title %}User Authentication{% endblock %}
+
+{% block extra_head %}
+
+<style>
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        margin-bottom: 5px;
+    }
+
+    input,
+    button {
+        margin-top: 5px;
+    }
+
+    button {
+        padding: 4px 12px;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+    }
+
+    button.danger {
+        background-color: #d9534f;
+    }
+
+    button.danger:hover {
+        background-color: #d83c37;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        padding: 4px;
+        width: 200px;
+        box-sizing: border-box;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a class="active" href="/access_control/user_access_management">User Access Management</a>
+    <a href="/access_control/ssh_management">SSH Management</a>
+    <!-- <a href="/access_control/ubugaurd_authentication">UbuGaurd Authentication</a> -->
+</div>
+
+<div class="control-panel container-fluid">
+
+    <div class="row controls">
+
+        <div class="col-6">
+            <div class="box" id="userBox">
+                <h5>Users</h5>
+                <ul class="box" id="userList"></ul>
+                <div class="box">
+                    <h6>Add User</h6>
+                    <input type="text" id="usernameInput" placeholder="Username"><br>
+                    <input type="password" id="passwordInput" placeholder="Password"><br>
+                    <button onclick="addUser()">Add User</button>
+                </div>
+                <div class="box">
+                    <h6>Remove User</h6>
+                    <input type="text" id="removeUsernameInput" placeholder="Username">
+                    <button class="danger" onclick="removeUser()">Remove User</button>
+                </div>
+            </div>
+
+
+            <div class="box" id="lastLoginBox">
+                <h5>Last Login</h5>
+                <ul id="lastLoginList"></ul>
+            </div>
+        </div>
+
+        <div class="col-6">
+
+            <div class="box" id="sudoersBox">
+                <h5>Sudoers</h5>
+                <ul class="box" id="sudoersList"></ul>
+                <div class="box">
+                    <h6>Add Sudoer</h6>
+                    <input type="text" id="sudoerUsernameInput" placeholder="Username">
+                    <button onclick="addSudoer()">Add Sudoer</button>
+                </div>
+                <div class="box">
+                    <h6>Remove Sudoer</h6>
+                    <input type="text" id="removeSudoerUsernameInput" placeholder="Username">
+                    <button class="danger" onclick="removeSudoer()">Remove Sudoer</button>
+                </div>
+            </div>
+
+            <div class="box" id="lastActivityBox">
+                <h5>Last Activity</h5>
+                <ul id="lastActivityList"></ul>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Fetch and display users
+        getUsers();
+
+        // Fetch and display sudoers
+        getSudoers();
+
+        // Fetch and display last login
+        getLastLogin();
+
+        // Fetch and display last activity
+        getLastActivity();
+
+        // Function to add a user
+        window.addUser = function () {
+            const username = document.getElementById('usernameInput').value;
+            const password = document.getElementById('passwordInput').value;
+
+            // Perform validation if needed
+            fetch('/access_control/user_access_management/uam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'action': 'add_user', 'uname': username, 'pass': password }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response
+                    console.log('User added:', data);
+                    getUsers(); // Refresh user list after adding
+                })
+                .catch(error => console.error('Error:', error));
+        };
+
+        // Function to remove a user
+        window.removeUser = function () {
+            const username = document.getElementById('removeUsernameInput').value;
+
+            fetch('/access_control/user_access_management/uam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'action': 'remove_user', 'uname': username }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response
+                    console.log('User Removed:', data);
+                    getUsers(); // Refresh user list after adding
+                })
+                .catch(error => console.error('Error:', error));
+        };
+
+        window.addSudoer = function () {
+            const sudoerUsername = document.getElementById('sudoerUsernameInput').value;
+
+            // Perform validation if needed
+            fetch('/access_control/user_access_management/pam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'action': 'add_user','uname': sudoerUsername }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response
+                    console.log('Sudoer added:', data);
+                    getSudoers(); // Refresh sudoers list after adding
+                })
+                .catch(error => console.error('Error:', error));
+        };
+
+        // Function to remove a sudoer
+        window.removeSudoer = function () {
+            const sudoerUsername = document.getElementById('removeSudoerUsernameInput').value;
+
+            // Perform validation if needed
+            fetch('/access_control/user_access_management/pam', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'action': 'remove_user', 'uname': sudoerUsername}),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the response
+                    console.log('Sudoer removed:', data);
+                    getSudoers(); // Refresh sudoers list after removal
+                })
+                .catch(error => console.error('Error:', error));
+        };
+    });
+
+    // Function to get and display users
+    function getUsers() {
+        // Fetch users from your API endpoint
+        // Update the endpoint and handle the response accordingly
+        fetch('/access_control/user_access_management/uam')
+            .then(response => response.json())
+            .then(data => {
+                // Update the user list
+                const userList = document.getElementById('userList');
+                userList.innerHTML = '';
+                data.forEach(user => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = JSON.stringify(user);
+                    userList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function getSudoers() {
+        // Fetch sudoers data from your API endpoint
+        // Update the endpoint and handle the response accordingly
+        fetch('/access_control/user_access_management/pam')
+            .then(response => response.json())
+            .then(data => {
+                // Update the sudoers list
+                const sudoersList = document.getElementById('sudoersList');
+                sudoersList.innerHTML = '';
+                data.forEach(sudoer => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = JSON.stringify(sudoer);
+                    sudoersList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function getLastLogin() {
+        // Fetch last login data from your API endpoint
+        // Update the endpoint and handle the response accordingly
+        fetch('/access_control/user_access_management/ul')
+            .then(response => response.json())
+            .then(data => {
+                // Update the last login list
+                const lastLoginList = document.getElementById('lastLoginList');
+                lastLoginList.innerHTML = '';
+                data.forEach(entry => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `${entry.user}: ${entry.last_login}`;
+                    lastLoginList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    // Fetch and display last activity
+    function getLastActivity() {
+        // Fetch last activity data from your API endpoint
+        // Update the endpoint and handle the response accordingly
+        fetch('/access_control/user_access_management/ua')
+            .then(response => response.json())
+            .then(data => {
+                // Update the last activity list
+                const lastActivityList = document.getElementById('lastActivityList');
+                lastActivityList.innerHTML = '';
+                data.forEach(activity => {
+                    const listItem = document.createElement('li');
+                    listItem.classList = 'box'
+                    listItem.textContent = `${activity.timestamp}: ${activity.activity}`;
+                    lastActivityList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+</script>
+
+{% endblock %}

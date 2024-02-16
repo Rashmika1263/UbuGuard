@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}SSH Management{% endblock %}
+
+{% block extra_head %}
+
+<style>
+    .config-box {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    .config-box h5 {
+        margin-top: 0;
+    }
+
+    input {
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #e75a37;
+        margin-left: 10px;
+        padding: 5px 10px;
+        color: white;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    label.box{
+        font-size: 1.1rem;
+        font-weight: 600;
+        padding: 8px;
+    }
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a href="/access_control/user_access_management">User Access Management</a>
+    <a class="active" href="/access_control/ssh_management">SSH Management</a>
+    <!-- <a href="/access_control/ubugaurd_authentication">UbuGaurd Authentication</a> -->
+</div>
+
+<div class="control-panel container-fluid">
+
+    <div class="row controls">
+        <!-- <div class="col-6"> -->
+        <h2>SSH Settings</h2>
+
+        <form id="sshSettingsForm" method="post">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+            <br>
+
+            <label class="box">
+                Allow Users (comma-separated):
+                <input type="text" name="allow_users">
+            </label>
+            <br>
+
+            <label class="box">
+                Change Default Port:
+                <input type="text" name="change_default_port">
+            </label>
+            <br>
+
+            <label class="box">
+                Client Alive Interval:
+                <input type="text" name="client_alive_interval">
+            </label>
+            <br>
+
+            <label class="box">
+                Client Alive Count Max:
+                <input type="text" name="client_alive_count_max">
+            </label>
+            <br>
+
+            <label class="box">
+                Login Grace Time:
+                <input type="text" name="login_grace_time">
+            </label>
+            <br>
+
+            <label class="box">
+                Password Authentication:
+                <input type="checkbox" name="password_authentication">
+            </label>
+            <br>
+
+            <!-- Additional settings -->
+            <label class="box">
+                Permit Root Login:
+                <input type="checkbox" name="permit_root_login">
+            </label>
+            <br>
+
+            <label class="box">
+                Use DNS:
+                <input type="checkbox" name="use_dns">
+            </label>
+            <br>
+
+            <label class="box">
+                Permit Empty Passwords:
+                <input type="checkbox" name="permit_empty_passwords">
+            </label>
+            <br>
+
+            <button type="submit">Apply Changes</button>
+        </form>
+        <!-- </div> -->
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Function to send a GET request to retrieve current SSH settings
+        function getSSHSettings() {
+            fetch('/access_control/ssh_management/conf')
+                .then(response => response.json())
+                .then(currentSettings => {
+                    console.log(currentSettings);
+
+                    // Populate the form fields with the current settings
+                    document.getElementsByName('password_authentication')[0].checked = currentSettings.PasswordAuthentication;
+                    document.getElementsByName('allow_users')[0].value = currentSettings.AllowUsers.join(', ');
+                    document.getElementsByName('permit_root_login')[0].checked = currentSettings.PermitRootLogin;
+                    document.getElementsByName('use_dns')[0].checked = currentSettings.UseDNS;
+                    document.getElementsByName('permit_empty_passwords')[0].checked = currentSettings.PermitEmptyPasswords;
+                    document.getElementsByName('client_alive_interval')[0].value = currentSettings.ClientAliveInterval;
+                    document.getElementsByName('client_alive_count_max')[0].value = currentSettings.ClientAliveCountMax;
+                    document.getElementsByName('login_grace_time')[0].value = currentSettings.LoginGraceTime;
+                    document.getElementsByName('change_default_port')[0].value = currentSettings.DefaultPort;
+                })
+                .catch(error => console.error(error));
+        }
+
+        // Send a GET request to retrieve current SSH settings when the page loads
+        getSSHSettings();
+
+        // Add event listener for the Apply Changes button
+        document.getElementById('sshSettingsForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Serialize the form data to send in a POST request
+            var formData = new FormData(this);
+
+            // Send a POST request to the server to apply the changes
+            fetch('/access_control/ssh_management/conf', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+                .then(response => response.text())
+                .then(responseText => {
+                    // Handle response if needed
+                    console.log(responseText);
+                    // After applying changes, retrieve and update the current settings
+                    getSSHSettings();
+                })
+                .catch(error => console.error(error));
+        });
+    });
+</script>
+
+{% endblock %}

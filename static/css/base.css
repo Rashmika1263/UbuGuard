@@ -1,0 +1,149 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    font-family: 'Ubuntu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    background-color: #312e2e;
+}
+
+header{
+    background-color: #d45d2e;
+    color: white;
+    /* height: 4rem; */
+    /* width: 100%; */
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    /* align-items: center; */
+
+    padding: 1rem;
+    margin: 0px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+.search-item {
+    padding: 4px;
+    outline: 0px;
+    border: 0px;
+    border-radius: 5px;
+}
+
+span.icon {
+    padding: 0px 1rem;
+}
+
+span.icon:hover {
+    cursor: pointer;
+}
+
+.dashboard {
+    width: 99%;
+    padding: 1%;
+    /* margin: 4rem 1% 0% 0%; */
+    border-radius: 10px;
+}
+
+.light-head {
+    font-weight: 100;
+}
+
+/* main-menu */
+
+.main-menu {
+    background-color: rgb(77, 78, 78);
+    padding: 1%;
+    border-radius: 10px;
+}
+
+.main-menu h2 {
+    text-align: center;
+    color: white;
+}
+
+.main-menu a {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: white;
+    text-decoration: none;
+    text-align: start;
+    background-color: #9c4421;
+    font-size: large;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 500;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.main-menu a.active {
+    background-color: #e75a37; 
+    box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.3);
+    color: #fff; 
+}
+
+
+/* Style the active class, and buttons on mouse-over */
+.btn:hover {
+    background-color: #e75a37;
+    color: white;
+}
+
+/* sub-menu */
+
+.top-menu {
+
+    background-color: #6d6969;
+    padding: 12px 30px 12px 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: flex-start;
+
+}
+
+.top-menu a {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: large;
+    padding: 5px 10px;
+    margin: 0 4px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+}
+
+.top-menu a.active {
+    background-color: #e75a37;
+}
+
+.control-panel {
+    margin: 1rem 0;
+    color: #fff;
+    background-color: #6d6969;
+    padding: 12px 30px 12px 20px;
+    border-radius: 10px;
+}
+
+.controls h5, h6{
+    font-weight: 700;
+}
+
+.box{
+    margin-bottom: 10px;
+    font-size: 15px;
+    background-color: #53535386; 
+    border-radius: 10px; 
+    padding: 5px 10px;
+}
+
+span .sub-heading {
+    font-weight: 600;
+}

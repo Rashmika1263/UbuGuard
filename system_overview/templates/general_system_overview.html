@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}General System Overview{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+    <!-- Your specific content for the General System Overview page goes here -->
+    <div class="top-menu nav nav-tabs">
+                    <a class="active" href="/system_overview/general_system_overview">General System Overview</a>
+                    <a href="/system_overview/security_status">Security Status</a>
+                    <a href="/system_overview/security_assessment">Security Assessment</a>
+                    <!-- <a href="/system_overview/critical_alerts">Critical Alerts</a> -->
+                </div>
+                
+                <div class="control-panel container-fluid">
+
+                    <div class="row controls">
+                        <div class="col-6">
+                            
+                            <div class="box">
+                                <h5>Machine Information:</h5>
+                                <pre>{{ system_info.machine_info|default:"Not available" }}</pre>
+                            </div>
+
+                            <div class="box">
+                                <h5>CPU Information:</h5>
+                                <pre>{{ system_info.cpu_info|default:"Not available" }}</pre>
+                            </div>
+
+                            <div class="box">
+                                <h5>Memory Information:</h5>
+                                <pre>{{ system_info.memory_info|default:"Not available" }}</pre>
+                            </div>
+
+                            <div class="box">
+                                <h5>Disk Information:</h5>
+                                <pre>{{ system_info.disk_info|default:"Not available" }}</pre>
+                            </div>
+
+                            <div class="box">
+                                <h5>Partition Information:</h5>
+                                <pre>{{ system_info.partition_info|default:"Not available" }}</pre>
+                            </div>
+
+                        </div>
+
+                        <div class="col-6">
+
+                            <div class="box">
+                                <h5>System Information:</h5>
+                                <pre>{{ system_info.system_info|default:"Not available" }}</pre>
+                            </div>
+
+                            <div class="box">
+                                <h5>Network Information:</h5>
+                                <pre>{{ system_info.network_info|default:"Not available" }}</pre>
+                            </div>
+                                                        
+                            <div class="box">
+                                <h5>Graphics Information:</h5>
+                                <pre>{{ system_info.graphics_info|default:"Not available" }}</pre>
+                            </div>
+                                                        
+                            <div class="box">
+                                <h5>Audio Information:</h5>
+                                <pre>{{ system_info.audio_info|default:"Not available" }}</pre>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+{% endblock %}

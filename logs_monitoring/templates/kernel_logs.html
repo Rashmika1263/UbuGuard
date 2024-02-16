@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Kernel Logs{% endblock %}
+
+{% block extra_head %}
+
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+
+    #loadMoreBtn {
+        margin-top: 10px;
+        padding: 8px 16px;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a href="/logs_monitoring/system/">System Logs</a>
+    <a class="active" href="/logs_monitoring/kernel/">Kernel Logs</a>
+    <a href="/logs_monitoring/auth/">Auth Logs</a>
+</div>
+
+<div class="control-panel container-fluid">
+
+    <div class="row controls">
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Host</th>
+                    <th>Activity</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Table rows will be inserted here dynamically -->
+            </tbody>
+        </table>
+
+        <button id="loadMoreBtn" onclick="loadMore()">Load More</button>
+    </div>
+
+</div>
+
+<script>
+    let startIndex = 0;
+    const batchSize = 10;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchLogs();
+    });
+
+    function fetchLogs() {
+        const endpoint = `/logs_monitoring/kernel/?length=${startIndex + batchSize}`;
+
+        fetch(endpoint)
+            .then(response => response.json())
+            .then(data => {
+                displayLogs(data);
+                startIndex += batchSize;
+            })
+            .catch(error => console.error('Error fetching data:', error));
+    }
+
+    function displayLogs(logs) {
+        const tableBody = document.querySelector('#logTable tbody');
+
+        tableBody.innerHTML = '';
+
+        logs.forEach(log => {
+            const row = tableBody.insertRow();
+            const timestampCell = row.insertCell(0);
+            const hostCell = row.insertCell(1);
+            const activityCell = row.insertCell(2);
+
+            timestampCell.textContent = log.timestamp;
+            hostCell.textContent = log.host;
+            activityCell.textContent = log.activity;
+        });
+    }
+
+    function loadMore() {
+        fetchLogs();
+    }
+</script>
+
+
+{% endblock %}

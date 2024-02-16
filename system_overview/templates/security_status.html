@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Security Status{% endblock %}
+
+{% block extra_head %}
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a href="/system_overview/general_system_overview">General System Overview</a>
+    <a class="active" href="/system_overview/security_status">Security Status</a>
+    <a href="/system_overview/security_assessment">Security Assessment</a>
+    <!-- <a href="/system_overview/critical_alerts">Critical Alerts</a> -->
+</div>
+
+<div class="control-panel container-fluid">
+    <div id="display" class="row controls">
+    </div>
+</div>
+
+<script src="{% static '/js/system_overview/security_status.js' %}"></script>
+{% endblock %}

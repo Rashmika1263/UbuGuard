@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}About{% endblock %}
+
+{% block extra_head %}
+
+<style>
+    p,
+    ul,
+    li {
+        font-size: 1.1rem;
+    }
+
+    a {
+        font-size: larger;
+        color: #001aff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+    .box {
+        padding: 1.2rem;
+    }
+
+    h4 {
+        font-weight: 800;
+    }
+</style>
+
+{% endblock %}
+
+{% block content %}
+<!-- Your specific content for the General System Overview page goes here -->
+<div class="top-menu nav nav-tabs">
+    <a class="active" href="/ubugaurd_app/about">About</a>
+</div>
+
+<div class="control-panel container-fluid">
+
+    <div class="row controls">
+        <div class="col-8">
+            <div class="box">
+                <section class="box">
+                    <h4>Overview</h4>
+                    <p>Welcome to UbuGuard, your go-to GUI-based Ubuntu security tool! UbuGuard simplifies complex
+                        security
+                        procedures on the Ubuntu operating system, making it easy for users to enhance the security of
+                        their
+                        systems.</p>
+                </section>
+
+                <section class="box">
+                    <h4>Purpose</h4>
+                    <p>UbuGuard is designed to simplify intricate security procedures for Ubuntu OS users. Whether
+                        you're a
+                        novice or an experienced user, our user-friendly GUI makes it straightforward to implement
+                        robust
+                        security measures.</p>
+                </section>
+
+                <section class="box">
+                    <h4>Version</h4>
+                    <p>Current Version: 1.0.0</p>
+                </section>
+
+                <!-- <section class="box">
+                    <h4>Team Members</h4>
+                    <ul>
+                        <li><strong>Bala Sai</strong> - GitHub: <a href="https://github.com/BalaSai"
+                                target="_blank">BalaSai</a></li>
+                        <li><strong>Ruthwik</strong> - GitHub: <a href="https://github.com/Ruthwik"
+                                target="_blank">Ruthwik</a></li>
+                        <li><strong>Rashmika</strong> - GitHub: <a href="https://github.com/Rashmika"
+                                target="_blank">Rashmika</a></li>
+                    </ul>
+                </section>
+
+                <section class="box">
+                    <h4>Contact Us</h4>
+                    <p>Have questions, feedback, or suggestions? Reach out to our team members on GitHub:</p>
+                    <ul>
+                        <li><a href="https://github.com/BalaSai" target="_blank">Bala Sai</a></li>
+                        <li><a href="https://github.com/Ruthwik" target="_blank">Ruthwik</a></li>
+                        <li><a href="https://github.com/Rashmika" target="_blank">Rashmika</a></li>
+                    </ul>
+                    <p>Feel free to contribute, report issues, or connect with us. Your security matters to us!</p>
+                </section> -->
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
